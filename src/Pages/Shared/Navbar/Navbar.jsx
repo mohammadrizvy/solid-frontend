@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// src/components/Navbar/Navbar.js
+
+import React, { useContext, useState } from "react";
 import { CiLogin } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
@@ -6,15 +8,13 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import useCart from "../../../Hooks/useCart";
 import useCategory from "../../../Hooks/useCategory";
+import { UserContext } from "../../../Context/UserContext";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const admin = true;
-  const user = false;
-  const posUser = true;
-  // Example user state, change it according to your actual logic
+  const { user, setUser } = useContext(UserContext); // Access user and setUser from context
 
-  const { data: cartData = [], refetch, isLoading } = useCart();
+  const { data: cartData = [] } = useCart();
   const cartItems = cartData.patcs || [];
 
   const { data: categories = [] } = useCategory();
@@ -23,8 +23,16 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user"); // Remove user data from localStorage
+    setUser(null); // Clear user context
+  };
+
   return (
-    <div className="navbar bg-base-100 px-4  border-b-2  rounded-md sticky top-0 z-50">
+    <div className="navbar bg-base-100 px-4 border-b-2 rounded-md sticky top-0 z-50">
       {/* Start Section for Logo and Mobile Menu */}
       <div className="navbar-start">
         {/* Mobile Menu Icon */}
@@ -65,54 +73,17 @@ const Navbar = () => {
                     <Link to={"/allProducts"}>সকল পন্য</Link>
                   </summary>
                   <ul className="min-w-max px-6 py-4 text-center space-y-2">
-                    {" "}
-                    {/* Ensures the container is wide enough */}
-                    <li className="py-1 whitespace-nowrap">
-                      {" "}
-                      {/* Ensures text doesn't wrap */}
-                      <p>সুন্দরবনের মধু</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>সরিষা ফুলের মধু</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>কালোজিরা ফুলের মধু</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>লিচু ফুলের মধু</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>১০০ গ্রাম মধু কাঁচের বোতল</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>কালোজিরার তেল</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>সরিষার তেল</p>
-                    </li>
-                    <li className="py-1 whitespace-nowrap">
-                      <p>কালোজিরা</p>
-                    </li>
+                    {categories.map((category, index) => (
+                      <li key={index} className="py-1 whitespace-nowrap">
+                        <p>{category.name}</p>
+                      </li>
+                    ))}
                   </ul>
                 </details>
               </li>
-              <li>
-                <Link to="/">ব্লগ</Link>
-              </li>
-              <li>
-                <Link to="/">টার্মস এন্ড কন্ডিশন</Link>
-              </li>
-              <li>
-                <Link to="/">যোগাযোগ</Link>
-              </li>
-              {admin && (
+              {user && user.role === "shss_admin" && (
                 <li>
-                  <Link to="/dashboard">ড্যাশবোর্ড</Link>
-                </li>
-              )}
-              {posUser && (
-                <li>
-                  <Link to="/pos">POS</Link>
+                  <Link to="/admin-dashboard">ড্যাশবোর্ড</Link>
                 </li>
               )}
             </ul>
@@ -121,9 +92,9 @@ const Navbar = () => {
         {/* Logo and Brand Name */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            className="w-10 h-10 md:w-10 md:h-10"
+            className="w-10 h-10"
             src="/Solid-Honey-Logo-for-daraz-100x100.png"
-            alt="myLogo"
+            alt="Logo"
           />
           <span className="text-xl font-semibold">Solid Honey-মধু</span>
         </Link>
@@ -132,57 +103,108 @@ const Navbar = () => {
       {/* Center Section for Desktop Menu */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-10">
+          {/* Dropdown Container */}
+          <li className="relative group">
+            {/* Main Link with an arrow to indicate dropdown */}
+            <div className="cursor-pointer flex items-center space-x-1">
+              <Link to="/about-us" className="flex items-center">
+                আমাদের সম্পর্কে
+              </Link>
+              <svg
+                className="w-4 h-4 transform group-hover:rotate-180 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+
+            {/* Dropdown Menu */}
+            <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg p-3 mt-8 z-10 w-48">
+              <li>
+                <Link
+                  to="/about-us"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  অর্জন
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/media-coverage"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  মিডিয়া কভারেজ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/honey-farm"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  মৌ খামার
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/fair-campaign"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  মেলা/ক্যাম্পেইন
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/gallery"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  ছবি সমগ্র
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/update-notice"
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                >
+                  নোটিশ/নিউজ
+                </Link>
+              </li>
+            </ul>
+          </li>
+
           <li>
-            <Link to="/about-us">আমাদের সম্পর্কে</Link>
-          </li>
-          <li tabIndex={0}>
-            <details>
-              <summary>
-                <Link to={"/allProducts"}>সকল পন্য</Link>
-              </summary>
-              <ul className="min-w-max  text-center space-y-2">
-                {/* Ensures the container is wide enough */}
-                {categories.map((category, index) => (
-                  <li key={index} className="p whitespace-nowrap">
-                    {/* Ensures text doesn't wrap */}
-                    <Link to={"/allProducts"}>
-                      <p>{category.name}</p>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
+            <Link to="/allProducts">সকল পন্য</Link>
           </li>
           <li>
-            <Link to="/">ব্লগ</Link>
+            <Link to="/terms">টার্মস এন্ড কন্ডিশন</Link>
           </li>
           <li>
-            <Link to="/">টার্মস এন্ড কন্ডিশন</Link>
+            <Link to="/contact">যোগাযোগ</Link>
           </li>
-          <li>
-            <Link to="/">যোগাযোগ</Link>
-          </li>
-          {admin && (
+          {user && user.role === "shss_admin" && (
             <li>
               <Link to="/admin-dashboard">ড্যাশবোর্ড</Link>
-            </li>
-          )}
-          {posUser && (
-            <li>
-              <Link to="/dashboard">POS</Link>
             </li>
           )}
         </ul>
       </div>
 
       {/* End Section for User Actions */}
-      <div className="navbar-end">
+      <div className="navbar-end flex items-center">
+        {user && (
+          <span className="mr-4 text-sm font-medium">{user.username}</span>
+        )}
         <Link to="/carts" className="btn btn-ghost">
-          <p></p>
           <div className="flex">
             <IoBagHandleOutline color="#D19E47" size={26} />
-            {/* Only show the badge if data exists and its length is greater than 0 */}
-            {cartItems && cartItems.length > 0 && (
+            {cartItems.length > 0 && (
               <div className="text-[#D19E47]">{cartItems.length}</div>
             )}
           </div>
@@ -197,21 +219,16 @@ const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 shadow"
             >
               <li>
-                <p className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </p>
-              </li>
-              <Link to="/dashboard">
-                <li>
-                  <p>Dashboard</p>
-                </li>
-              </Link>
-              <li>
-                <p>Settings</p>
+                <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <p>Logout</p>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/settings">Settings</Link>
+              </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
               </li>
             </ul>
           </div>

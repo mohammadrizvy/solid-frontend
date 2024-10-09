@@ -16,7 +16,7 @@ const ManageOrder = () => {
   const toggleOrderDetails = (orderId) => {
     setExpandedOrders((prev) => ({
       ...prev,
-      [orderId]: !prev[orderId],
+      [orderId]: !prev[orderId], 
     }));
   };
 

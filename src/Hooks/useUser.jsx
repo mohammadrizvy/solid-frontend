@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
+import apiClient from '../Axios/axiosInstance';
 
 const useUser = () => {
 

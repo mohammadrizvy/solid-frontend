@@ -8,7 +8,7 @@ const PendingPage = () => {
   const [expandedOrders, setExpandedOrders] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
-  const itemsPerPage = 5;
+  const itemsPerPage = 20;
 
   // Toggle order details visibility
   const toggleOrderDetails = (orderId) => {
@@ -115,7 +115,7 @@ const PendingPage = () => {
 
       {/* Orders Table */}
       <div className="overflow-x-auto">
-        <table className="table w-full">
+        <table className="table table-xs">
           <thead>
             <tr>
               <th className="text-center">SL</th>
@@ -148,7 +148,7 @@ const PendingPage = () => {
                     <td>{new Date(groupedOrder.date).toLocaleDateString()}</td>
                     <td className="flex mt-3 gap-4 items-center">
                       <button
-                        className="btn btn-sm text-white btn-primary"
+                        className="btn btn-xs text-white btn-primary"
                         onClick={() =>
                           toggleOrderDetails(groupedOrder.order_id)
                         }
@@ -158,7 +158,7 @@ const PendingPage = () => {
                           : "View"}
                       </button>
                       <button
-                        className="btn btn-sm btn-success text-white"
+                        className="btn btn-xs btn-success text-white"
                         onClick={() =>
                           handleDeliveredOrder(groupedOrder.order_id)
                         }
@@ -166,7 +166,7 @@ const PendingPage = () => {
                         Delivered
                       </button>
                       <button
-                        className="btn btn-sm btn-error text-white"
+                        className="btn btn-xs btn-error text-white"
                         onClick={() => handleDenyOrder(groupedOrder.order_id)}
                       >
                         Deny

@@ -8,7 +8,7 @@ const DeliveredPage = () => {
   const [expandedOrders, setExpandedOrders] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
-  const itemsPerPage = 5;
+  const itemsPerPage = 20;
 
   // Toggle order details visibility
   const toggleOrderDetails = (orderId) => {
@@ -100,7 +100,7 @@ const DeliveredPage = () => {
       </div>
       {/* Orders Table */}
       <div className="overflow-x-auto">
-        <table className="table w-full">
+        <table className="table table-xs">
           <thead>
             <tr>
               <th className="text-center">SL</th>
@@ -133,7 +133,7 @@ const DeliveredPage = () => {
                     <td>{new Date(groupedOrder.date).toLocaleDateString()}</td>
                     <td className="join flex mt-3 items-center">
                       <button
-                        className="btn join-item btn-sm text-white btn-primary"
+                        className="btn join-item btn-xs text-white btn-primary"
                         onClick={() =>
                           toggleOrderDetails(groupedOrder.order_id)
                         }

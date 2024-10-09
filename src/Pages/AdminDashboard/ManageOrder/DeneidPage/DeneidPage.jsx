@@ -8,7 +8,7 @@ const DeniedPage = () => {
   const [expandedOrders, setExpandedOrders] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
-  const itemsPerPage = 5; // Adjust the number of items per page as needed
+  const itemsPerPage = 20; // Adjust the number of items per page as needed
 
   // Toggle order details visibility
   const toggleOrderDetails = (orderId) => {
@@ -90,7 +90,7 @@ const DeniedPage = () => {
 
       {/* Orders Table */}
       <div className="overflow-x-auto">
-        <table className="table w-full">
+        <table className="table table-xs">
           <thead>
             <tr>
               <th className="text-center">SL</th>
@@ -123,7 +123,7 @@ const DeniedPage = () => {
                     <td>{new Date(groupedOrder.date).toLocaleDateString()}</td>
                     <td className="join flex mt-3 items-center">
                       <button
-                        className="btn join-item btn-sm text-white btn-primary"
+                        className="btn join-item btn-xs text-white btn-primary"
                         onClick={() =>
                           toggleOrderDetails(groupedOrder.order_id)
                         }
@@ -133,7 +133,7 @@ const DeniedPage = () => {
                           : "View"}
                       </button>
                       <button
-                        className="btn btn-sm join-item btn-secondary"
+                        className="btn btn-xs join-item btn-secondary"
                         onClick={() =>
                           handleReinstateOrder(groupedOrder.order_id)
                         }

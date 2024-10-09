@@ -16,25 +16,25 @@ const ProductDetails = () => {
   return (
     <div className="container mx-auto p-6 mt-16 mb-16">
       <div className="flex flex-col lg:flex-row gap-8">
-        {/* Product Image */}
+        {/* Product Image */} 
         <div className="w-full lg:w-1/2 grid grid-cols-2 gap-4 justify-center">
           <img
-            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images}`}
+            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images[0]}`}
             alt={singleProduct.title}
             className="w-full max-w-md rounded-lg"
           />
           <img
-            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images}`}
+            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images[1]}`}
             alt={singleProduct.title}
             className="w-full max-w-md rounded-lg"
           />
           <img
-            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images}`}
+            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images[2]}`}
             alt={singleProduct.title}
             className="w-full max-w-md rounded-lg"
           />
           <img
-            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images}`}
+            src={`${import.meta.env.VITE_BASE_URL}${singleProduct.images[3]}`}
             alt={singleProduct.title}
             className="w-full max-w-md rounded-lg"
           />

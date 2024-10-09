@@ -85,6 +85,7 @@ const UserOrdersHistory = () => {
                     <td>{order.phone_number || "N/A"}</td>
                     <td>{order.address}</td>
                     <td>{totalWithDelivery} টাকা</td>
+                    <td>{order.payment_method} টাকা</td>
                     <td>{new Date(order.date).toLocaleDateString()}</td>
                     <td className="flex mt-3 gap-4 items-center">
                       <button

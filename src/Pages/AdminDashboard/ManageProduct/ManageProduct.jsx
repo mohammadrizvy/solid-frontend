@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import Loader from "../../../Components/ui/Loader";
+import ErrorPage from "../../../Components/ui/ErrorPage";
 
 const ManageProduct = () => {
-  const { data: products = [], refetch, isLoading } = useProduct();
+  const { data: products = [], refetch, isLoading , isError } = useProduct();
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +56,14 @@ const ManageProduct = () => {
     });
   };
 
+  if(isLoading){
+    return <Loader></Loader>
+  }; 
+   if ( isError){
+     return <ErrorPage></ErrorPage>
+   }
+
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -76,7 +86,7 @@ const ManageProduct = () => {
                     <div className="avatar">
                       <div className="mask mask-squircle h-12 w-12">
                         <img
-                          src={`${import.meta.env.VITE_BASE_URL}${product.images}`}
+                          src={`${import.meta.env.VITE_BASE_URL}${product.images[0]}`}
                           alt="Avatar Tailwind CSS Component"
                         />
                       </div>
@@ -103,9 +113,11 @@ const ManageProduct = () => {
                       Details
                     </button>
                   </Link>
-                  <button className="btn text-white mr-2 btn-info btn-xs">
-                    Edit
-                  </button>
+                  <Link to={`/admin-dashboard/update-product/${product.id}`}>
+                    <button className="btn text-white mr-2 btn-info btn-xs">
+                      Edit
+                    </button>
+                  </Link>
                   <button
                     onClick={() => handleDeleteProduct(product.id)}
                     className="btn text-white mr-2 btn-error btn-xs"

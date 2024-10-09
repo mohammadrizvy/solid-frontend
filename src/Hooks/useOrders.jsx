@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import apiClient from "../Axios/axiosInstance";
 
 const useOrders = () => {
-  const { data, isLoading, refetch, error } = useQuery({
+  const { data, isLoading, refetch, isError } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
       const res = await axios.get(
@@ -13,7 +14,7 @@ const useOrders = () => {
 
   });
 
-  return {data, refetch, error, isLoading};
+  return {data, refetch, isError, isLoading};
 };
 
 export default useOrders;
